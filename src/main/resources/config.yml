@@ -1,0 +1,14 @@
+
+percentMoneyLostOnDeathMin: 5
+percentMoneyLotsOnDeathMax: 25
+
+#120 minutes = 2h needed to play to receive a 0.2 interest
+#If player has less they'll receive an appropriate amount
+interestMin: 0.0
+interestMax: 0.2
+minutesPlayedForMax: 120
+
+#0.05% per day in a row
+#Streak is lost if you don't login in a day
+interestGainStreak: 0.05
+maxInterestGainStreak: 1.5
