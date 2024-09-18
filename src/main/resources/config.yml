@@ -2,7 +2,7 @@
 percentMoneyLostOnDeathMin: 5
 percentMoneyLotsOnDeathMax: 25
 
-#120 minutes = 2h needed to play to receive a 0.2 interest
+#120 minutes = 2h needed to play to receive a 2.1% interest
 #If player has less they'll receive an appropriate amount
 interestMin: 0.0
 interestMax: 2.1
