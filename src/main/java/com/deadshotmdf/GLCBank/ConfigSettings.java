@@ -55,10 +55,10 @@ public class ConfigSettings {
         double maxInterest  = config.getDouble("interestMax");
         minutesPlayedForMax = config.getInt("minutesPlayedForMax");
 
-        interestGainStreak = config.getDouble("interestGainStreak") / 10;
-        maxInterestGainStreak = config.getDouble("maxInterestGainStreak") / 10;
+        interestGainStreak = config.getDouble("interestGainStreak") / 100;
+        maxInterestGainStreak = config.getDouble("maxInterestGainStreak") / 100;
 
-        interestMin = Math.min(minInterest, maxInterest) / 10;
-        interestMax = Math.max(minInterest, maxInterest) / 10;
+        interestMin = Math.min(minInterest, maxInterest) / 100;
+        interestMax = Math.max(minInterest, maxInterest) / 100;
     }
 }

@@ -5,11 +5,11 @@ percentMoneyLotsOnDeathMax: 25
 #120 minutes = 2h needed to play to receive a 0.2 interest
 #If player has less they'll receive an appropriate amount
 interestMin: 0.0
-interestMax: 0.2
+interestMax: 2.1
 minutesPlayedForMax: 120
 
-#0.005% per day in a row
+#0.05% per day in a row
 #30 days = 1.5%
 #Streak is lost if you don't login at all since the server restart
-interestGainStreak: 0.005
+interestGainStreak: 0.05
 maxInterestGainStreak: 1.5
