@@ -57,6 +57,7 @@ public class BankProfile {
             return;
 
         this.totalMinutesPlayedToday += TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - this.join);
+        this.join = 0;
     }
 
 }

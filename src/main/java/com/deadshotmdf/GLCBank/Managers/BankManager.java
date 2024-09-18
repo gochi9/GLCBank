@@ -104,16 +104,19 @@ public class BankManager extends InformationHolder {
     private void calculateBank(BankProfile bank){
         bank.onQuit();
 
+        double balance = bank.getAmount();
         double interest = BankUtils.getInterest(bank.getTotalMinutesPlayedToday());
         double dayStreakInterest = bank.getDayStreak() * ConfigSettings.getInterestGainStreak();
         dayStreakInterest = Math.min(dayStreakInterest, ConfigSettings.getMaxInterestGainStreak());
 
-        if(interest <= 0 || dayStreakInterest <= 0)
+        if(interest <= 0 && dayStreakInterest <= 0)
             return;
 
-        double balance = bank.getAmount();
+        if(balance < 0.0){
+            balance = 0.0;
+            bank.modifyAmount(0.0, ModifyType.SET);
+        }
 
-        if(balance > 0.0)
             bank.modifyAmount((balance * interest) + (balance * dayStreakInterest), ModifyType.ADD);
     }
 
