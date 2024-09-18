@@ -125,7 +125,7 @@ public class BankManager extends InformationHolder {
         new HashMap<>(banks).forEach((k, v) -> {
             String path = "Banks." + k;
             config.set(path + ".amount", Math.max(v.getAmount(), 0.0));
-            config.set(path + ".dayStreak", Math.max(v.getDayStreak(), 0));
+            config.set(path + ".dayStreak", v.hasJoinedToday() ? Math.max(v.getDayStreak(), 0) : 0);
         });
 
         saveC();

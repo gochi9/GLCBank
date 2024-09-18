@@ -30,6 +30,10 @@ public class BankProfile {
         return totalMinutesPlayedToday;
     }
 
+    public boolean hasJoinedToday(){
+        return joinedToday;
+    }
+
     public void modifyAmount(double amount, ModifyType modifyType) {
         switch (modifyType) {
             case ADD -> this.amount += amount;

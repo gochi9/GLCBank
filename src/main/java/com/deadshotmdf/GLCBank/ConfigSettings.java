@@ -51,14 +51,14 @@ public class ConfigSettings {
         percentMoneyLostOnDeathMin = config.getInt("percentMoneyLostOnDeathMin");
         percentMoneyLotsOnDeathMax = config.getInt("percentMoneyLotsOnDeathMax");
 
-        double minInterest = config.getDouble("interestMin");
-        double maxInterest  = config.getDouble("interestMax");
+        double minInterest = config.getDouble("interestMin") / 10;
+        double maxInterest  = config.getDouble("interestMax") / 10;
         minutesPlayedForMax = config.getInt("minutesPlayedForMax");
 
         interestGainStreak = config.getDouble("interestGainStreak");
         maxInterestGainStreak = config.getDouble("maxInterestGainStreak");
 
-        interestMin = Math.min(minInterest, maxInterest);
-        interestMax = Math.max(minInterest, maxInterest);
+        interestMin = Math.min(minInterest, maxInterest) / 10;
+        interestMax = Math.max(minInterest, maxInterest) / 10;
     }
 }
