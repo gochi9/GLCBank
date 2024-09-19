@@ -1,4 +1,4 @@
-package com.deadshotmdf.GLCBank.Objects;
+package com.deadshotmdf.GLCBank.Objects.Enums;
 
 public enum ModifyType{
 

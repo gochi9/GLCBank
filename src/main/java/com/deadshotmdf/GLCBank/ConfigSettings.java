@@ -52,6 +52,10 @@ public class ConfigSettings {
 
     private static String reloadConfigHelpMessage;
 
+    private static String openPlayerInputHelpMessage;
+    private static String invalidOpenPlayerInputSyntax;
+    private static String playerOffline;
+
     public static String getReloadConfig(){
         return reloadConfig;
     }
@@ -184,6 +188,18 @@ public class ConfigSettings {
         return reloadConfigHelpMessage;
     }
 
+    public static String getOpenPlayerInputHelpMessage() {
+        return openPlayerInputHelpMessage;
+    }
+
+    public static String getInvalidOpenPlayerInputSyntax() {
+        return invalidOpenPlayerInputSyntax;
+    }
+
+    public static String getPlayerOffline(String player) {
+        return playerOffline.replace("{player}", player);
+    }
+
     public static void reloadConfig(GLCB main) {
         main.saveDefaultConfig();
         main.reloadConfig();
@@ -239,6 +255,10 @@ public class ConfigSettings {
         seeBalanceSelfHelpMessage = color(messagesSection.getString("seeBalanceSelfHelpMessage"));
 
         reloadConfigHelpMessage = color(messagesSection.getString("reloadConfigHelpMessage"));
+
+        openPlayerInputHelpMessage = color(messagesSection.getString("openPlayerInputHelpMessage"));
+        invalidOpenPlayerInputSyntax = color(messagesSection.getString("invalidOpenPlayerInputSyntax"));
+        playerOffline = color(messagesSection.getString("playerOffline"));
     }
 
     private static String color(String s){

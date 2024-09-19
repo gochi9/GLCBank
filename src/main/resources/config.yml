@@ -36,13 +36,17 @@ messages:
   depositSuccessMessage: '&aYou have successfully deposited &6${amount} &ainto your bank account.'
   withdrawSuccessMessage: '&aYou have successfully withdrawn &6${amount} &afrom your bank account.'
 
-  consoleDepositWithdrawHelpMessage: "&6/bank consoledepositwithdraw <player> <amount> <deposit/withdraw> &e- Modify a player's bank balance."
-  invalidConsoleDepositWithdrawSyntax: "&cIncorrect usage. Correct syntax: &6/bank <player> <amount> <deposit/withdraw>"
-  consoleDepositWithdrawSuccessMessage: "&aSuccessfully {transactionType}ed &6${amount} &afor player &6{player}&a."
+  consoleDepositWithdrawHelpMessage: '&6/bank consoledepositwithdraw <player> <amount> <deposit/withdraw> &e- Modify a player`s bank balance.'
+  invalidConsoleDepositWithdrawSyntax: '&cIncorrect usage. Correct syntax: &6/bank consoledepositwithdraw <player> <amount> <deposit/withdraw>'
+  consoleDepositWithdrawSuccessMessage: '&aSuccessfully {transactionType}ed &6${amount} &afor player &6{player}&a.'
 
   peekBalanceHelpMessage: '&6/bank peek <player> &e- View a player`s bank balance.'
   invalidPeekBalanceSyntax: '&cIncorrect usage. Correct syntax: &6/bank peek <player>'
 
-  seeBalanceSelfHelpMessage: "&6/bank balance &e- Check your current bank balance."
+  seeBalanceSelfHelpMessage: '&6/bank balance &e- Check your current bank balance.'
 
-  reloadConfigHelpMessage: "&6/bank reload &e- Reload the bank configuration."
+  reloadConfigHelpMessage: '&6/bank reload &e- Reload the bank configuration.'
+
+  openPlayerInputHelpMessage: '&6/bank openinput <player> <deposit/withdraw> &e- Opens the bank input GUI for a player.'
+  invalidOpenPlayerInputSyntax: '&cIncorrect usage. Correct syntax: &6/bank openinput <player> <deposit/withdraw>'
+  playerOffline: '&cPlayer &6{player}&c needs to be online.'

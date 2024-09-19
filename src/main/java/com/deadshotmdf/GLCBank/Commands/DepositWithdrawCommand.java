@@ -2,8 +2,8 @@ package com.deadshotmdf.GLCBank.Commands;
 
 import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
-import com.deadshotmdf.GLCBank.Objects.CommandType;
-import com.deadshotmdf.GLCBank.Objects.ModifyType;
+import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
+import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class DepositWithdrawCommand extends SubCommand {
 
         ModifyType type = ModifyType.getModifyType(args[0]);
 
-        if(type == null){
+        if(type == null || type == ModifyType.SET){
             sender.sendMessage(ConfigSettings.getInvalidTransactionType());
             return;
         }
@@ -34,6 +34,6 @@ public class DepositWithdrawCommand extends SubCommand {
         }
 
         double finalAmount = bankManager.modifyBank(((Player)sender), amount, type);
-        sender.sendMessage(args[0].equalsIgnoreCase("deposit") ? ConfigSettings.getDepositSuccessMessage(finalAmount) : ConfigSettings.getWithdrawSuccessMessage(finalAmount));
+        sender.sendMessage(type == ModifyType.ADD ? ConfigSettings.getDepositSuccessMessage(finalAmount) : ConfigSettings.getWithdrawSuccessMessage(finalAmount));
     }
 }

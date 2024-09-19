@@ -3,11 +3,16 @@ package com.deadshotmdf.GLCBank.Managers;
 import com.deadshotmdf.GLCBank.*;
 import com.deadshotmdf.GLCBank.Commands.BankBalanceCommand;
 import com.deadshotmdf.GLCBank.File.InformationHolder;
-import com.deadshotmdf.GLCBank.Objects.BankProfile;
-import com.deadshotmdf.GLCBank.Objects.ModifyType;
+import com.deadshotmdf.GLCBank.Objects.Player.BankProfile;
+import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
+import com.deadshotmdf.GLCBank.Objects.Sign.SignActionFinish;
+import com.deadshotmdf.GLCBank.Objects.Top.PlayerDataPair;
+import com.deadshotmdf.GLCBank.Objects.Top.PlayerTopProfile;
 import com.deadshotmdf.GLCBank.Timers.BackupTimer;
+import com.deadshotmdf.GLCBank.Timers.CalculateTopBalance;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import com.deadshotmdf.GLCBank.Utils.NameSearcher;
+import de.rapha149.signgui.SignGUI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -26,6 +31,10 @@ public class BankManager extends InformationHolder {
     private final HashMap<String, UUID> uuids;
     private final NameSearcher nameSearcher;
     private final BackupTimer backupTimer;
+    private final CalculateTopBalance calculateTopBalance;
+    private final List<PlayerDataPair> topBankBalances, topCurrentBalances, topCombinedBalances;
+    private final HashMap<UUID, PlayerTopProfile> playerTopProfiles;
+    private final SignGUI depositGUI, withdrawGUI;
 
     public BankManager(GLCB main, Economy economy) {
         super(main, "bank.yml");
@@ -35,6 +44,16 @@ public class BankManager extends InformationHolder {
         this.banks = new HashMap<>();
         this.uuids = new HashMap<>();
         this.nameSearcher = new NameSearcher();
+        this.topBankBalances = new ArrayList<>();
+        this.topCurrentBalances = new ArrayList<>();
+        this.topCombinedBalances = new ArrayList<>();
+        this.playerTopProfiles = new HashMap<>();
+        this.depositGUI = SignGUI.builder()
+                .setLines(null, "^^^^^^^^^", "Please enter the", "deposit amount")
+                .setHandler(new SignActionFinish(main, ModifyType.ADD)).build();
+        this.withdrawGUI = SignGUI.builder()
+                .setLines(null, "^^^^^^^^^", "Please enter the", "withdraw amount")
+                .setHandler(new SignActionFinish(main, ModifyType.REMOVE)).build();
 
         try{loadInformation();}
         catch (Throwable ignored){}
@@ -53,7 +72,12 @@ public class BankManager extends InformationHolder {
         }
 
         this.backupTimer = new BackupTimer(this);
+        //1hour = 7200L = 3600seconds * 20 ticks
         this.backupTimer.runTaskTimerAsynchronously(main, 72000L, 72000L);
+
+        this.calculateTopBalance = new CalculateTopBalance(main, economy, this, banks);
+        //10minutes = 12000L = 600seconds * 20 ticks
+        this.calculateTopBalance.runTaskTimerAsynchronously(main, 20L, 12000L);
     }
 
     public BankProfile getPlayerBank(UUID uuid){
@@ -70,6 +94,24 @@ public class BankManager extends InformationHolder {
 
     public List<String> getNames(){
         return new LinkedList<>(uuids.keySet());
+    }
+
+    public void onJoin(Player player){
+        UUID uuid = player.getUniqueId();
+        String name =  player.getName().toLowerCase();
+        getPlayerBank(uuid).onJoin();
+        uuids.put(name, uuid);
+        nameSearcher.addName(name);
+    }
+
+    public void openPlayerInputSign(Player player, ModifyType modifyType){
+        switch(modifyType){
+            case ADD:
+                depositGUI.open(player);
+                break;
+            case REMOVE:
+                withdrawGUI.open(player);
+        }
     }
 
     public double withdrawBank(OfflinePlayer player, double withdrawAmount){
@@ -109,7 +151,10 @@ public class BankManager extends InformationHolder {
     }
 
     public void onServerStop(){
-        try{this.backupTimer.cancel();}
+        try{
+            this.backupTimer.cancel();
+            this.calculateTopBalance.cancel();
+        }
         catch (Throwable ignored){}
 
         banks.values().forEach(this::tryCalculateBank);
@@ -184,12 +229,16 @@ public class BankManager extends InformationHolder {
         return min == max ? max : random.nextInt((max - min) + 1) + min;
     }
 
-    public void onJoin(Player player){
-        UUID uuid = player.getUniqueId();
-        String name =  player.getName().toLowerCase();
-        getPlayerBank(uuid).onJoin();
-        uuids.put(name, uuid);
-        nameSearcher.addName(name);
+    public void updateTop(List<PlayerDataPair> topBankBalances, List<PlayerDataPair> topCurrentBalances, List<PlayerDataPair> topCombinedBalances, HashMap<UUID, PlayerTopProfile> playerTopProfiles){
+        this.topBankBalances.clear();
+        this.topCurrentBalances.clear();
+        this.topCombinedBalances.clear();
+        this.playerTopProfiles.clear();
+
+        this.topBankBalances.addAll(topBankBalances);
+        this.topCurrentBalances.addAll(topCurrentBalances);
+        this.topCombinedBalances.addAll(topCombinedBalances);
+        this.playerTopProfiles.putAll(playerTopProfiles);
     }
 
 }

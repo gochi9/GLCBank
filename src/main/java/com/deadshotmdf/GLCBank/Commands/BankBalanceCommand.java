@@ -3,7 +3,7 @@ package com.deadshotmdf.GLCBank.Commands;
 import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.GLCB;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
-import com.deadshotmdf.GLCBank.Objects.CommandType;
+import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,6 +28,7 @@ public class BankBalanceCommand implements CommandExecutor, TabCompleter {
         this.subCommands.put("reload", new ReloadConfig(main, bankManager, "glcbank.reload", CommandType.BOTH, 0, ConfigSettings.getReloadConfigHelpMessage(), ""));
         this.subCommands.put("deposit", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getDepositHelpMessage(), ConfigSettings.getInvalidDepositSyntax()));
         this.subCommands.put("withdraw", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getWithdrawHelpMessage(), ConfigSettings.getInvalidWithdrawSyntax()));
+        this.subCommands.put("openinput", new OpenPlayerInput(bankManager, "glcbank.openinput", CommandType.CONSOLE, 2, ConfigSettings.getOpenPlayerInputHelpMessage(), ConfigSettings.getInvalidOpenPlayerInputSyntax()));
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

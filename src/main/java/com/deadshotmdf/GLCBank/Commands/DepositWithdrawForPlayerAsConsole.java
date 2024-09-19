@@ -2,8 +2,8 @@ package com.deadshotmdf.GLCBank.Commands;
 
 import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
-import com.deadshotmdf.GLCBank.Objects.CommandType;
-import com.deadshotmdf.GLCBank.Objects.ModifyType;
+import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
+import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -45,7 +45,11 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
         }
 
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
-        sender.sendMessage(ConfigSettings.getConsoleDepositWithdrawSuccessMessage(modifyType.toString(), bankManager.modifyBank(targetPlayer, amount, modifyType), targetPlayer.getName()));
+        double finalAmount = bankManager.modifyBank(targetPlayer, amount, modifyType);
+        sender.sendMessage(ConfigSettings.getConsoleDepositWithdrawSuccessMessage(modifyType.toString(), finalAmount, targetPlayer.getName()));
+
+        if(targetPlayer.isOnline())
+            targetPlayer.getPlayer().sendMessage(modifyType == ModifyType.ADD ? ConfigSettings.getDepositSuccessMessage(finalAmount) : ConfigSettings.getWithdrawSuccessMessage(finalAmount));
     }
 
     @Override

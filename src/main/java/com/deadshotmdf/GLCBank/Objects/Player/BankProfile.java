@@ -1,4 +1,6 @@
-package com.deadshotmdf.GLCBank.Objects;
+package com.deadshotmdf.GLCBank.Objects.Player;
+
+import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
 
 import java.util.concurrent.TimeUnit;
 

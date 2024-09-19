@@ -3,14 +3,17 @@ package com.deadshotmdf.GLCBank.Commands;
 import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
 import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
+import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
 
-public class PeekBalance extends SubCommand{
+public class OpenPlayerInput extends SubCommand{
 
-    public PeekBalance(BankManager bankManager, String permission, CommandType commandType, int argsRequired, String commandHelpMessage, String commandWrongSyntax) {
+    public OpenPlayerInput(BankManager bankManager, String permission, CommandType commandType, int argsRequired, String commandHelpMessage, String commandWrongSyntax) {
         super(bankManager, permission, commandType, argsRequired, commandHelpMessage, commandWrongSyntax);
     }
 
@@ -26,7 +29,21 @@ public class PeekBalance extends SubCommand{
             return;
         }
 
-        sender.sendMessage(ConfigSettings.getPlayerBalance(args[1], bankManager.getPlayerBank(target).getAmount()));
+        Player player = Bukkit.getPlayer(target);
+
+        if(player == null){
+            sender.sendMessage(ConfigSettings.getPlayerOffline(args[1]));
+            return;
+        }
+
+        ModifyType modifyType = ModifyType.getModifyType(args[2]);
+
+        if(modifyType == null){
+            sender.sendMessage(ConfigSettings.getInvalidTransactionType());
+            return;
+        }
+
+        bankManager.openPlayerInputSign(player, modifyType);
     }
 
     @Override
