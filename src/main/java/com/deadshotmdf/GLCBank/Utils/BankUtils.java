@@ -40,4 +40,13 @@ public class BankUtils {
         }
     }
 
+    public static String formatDouble(double number) {
+        String formatted = String.format("%.2f", number);
+
+        if (formatted.endsWith(".00"))
+            return formatted.substring(0, formatted.length() - 3);
+
+        return formatted;
+    }
+
 }

@@ -11,8 +11,8 @@ public enum ModifyType{
             return null;
 
         return switch (s.toUpperCase()) {
-            case "ADD" -> ADD;
-            case "REMOVE" -> REMOVE;
+            case "DEPOSIT", "ADD" -> ADD;
+            case "REMOVE", "WITHDRAW" -> REMOVE;
             case "SET" -> SET;
             default -> null;
         };

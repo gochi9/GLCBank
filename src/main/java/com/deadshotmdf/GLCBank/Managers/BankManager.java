@@ -72,15 +72,15 @@ public class BankManager extends InformationHolder {
         return new LinkedList<>(uuids.keySet());
     }
 
-    public void withdrawBank(OfflinePlayer player, double withdrawAmount){
-        this.modifyBank(player, withdrawAmount, ModifyType.REMOVE);
+    public double withdrawBank(OfflinePlayer player, double withdrawAmount){
+        return this.modifyBank(player, withdrawAmount, ModifyType.REMOVE);
     }
 
-    public void depositBank(OfflinePlayer player, double depositAmount){
-        this.modifyBank(player, depositAmount, ModifyType.ADD);
+    public double depositBank(OfflinePlayer player, double depositAmount){
+        return this.modifyBank(player, depositAmount, ModifyType.ADD);
     }
 
-    public void modifyBank(OfflinePlayer player, double amount, ModifyType modifyType){
+    public double modifyBank(OfflinePlayer player, double amount, ModifyType modifyType){
         BankProfile bank = getPlayerBank(player.getUniqueId());
         boolean remove = modifyType == ModifyType.REMOVE;
         double balance = remove ? bank.getAmount() : economy.getBalance(player);
@@ -92,6 +92,8 @@ public class BankManager extends InformationHolder {
 
         if(response.transactionSuccess())
             bank.modifyAmount(amount, modifyType);
+
+        return amount;
     }
 
     public void onDeath(Player player){
@@ -100,7 +102,10 @@ public class BankManager extends InformationHolder {
         if(balance <= 0.0)
             return;
 
-        economy.withdrawPlayer(player, (getRandomNumber(ConfigSettings.getPercentMoneyLostOnDeathMin(), ConfigSettings.getPercentMoneyLotsOnDeathMax()) / 100.0) * balance);
+        double percent = getRandomNumber(ConfigSettings.getPercentMoneyLostOnDeathMin(), ConfigSettings.getPercentMoneyLotsOnDeathMax());
+        double balanceLost = (percent / 100.0) * balance;
+        economy.withdrawPlayer(player, balanceLost);
+        player.sendMessage(ConfigSettings.getDeathBalanceLossMessage(percent, balanceLost));
     }
 
     public void onServerStop(){

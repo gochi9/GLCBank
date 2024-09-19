@@ -1,4 +1,7 @@
 
+reloadConfig: '&aYou have reloaded the config'
+noPermission: '&4You do not have the permission to execute this command'
+
 percentMoneyLostOnDeathMin: 5
 percentMoneyLotsOnDeathMax: 25
 
@@ -13,3 +16,33 @@ minutesPlayedForMax: 120
 #Streak is lost if you don't login at all since the server restart
 interestGainStreak: 0.05
 maxInterestGainStreak: 1.5
+
+messages:
+  deathBalanceLossMessage: '&cOh no! You`ve died and lost &6{percentage}% &7(&6{balanceLost}&7) &cfrom your balance. Be careful next time.'
+
+  noAvailableCommands: '&cYou have no available commands.'
+  invalidCommand: '&cInvalid command. Use &6/bank help &cfor available commands.'
+  invalidTransactionType: '&cInvalid transaction type. Please specify &6deposit &cor &6withdraw&c.'
+  invalidAmount: '&cInvalid amount specified. Please enter a valid number.'
+  playerNotFound: '&cPlayer &6{player}&c not found.'
+  playerBalance: '&6{player}&e`s balance: &a${balance}'
+  playersOnly: '&cOnly players can use this command.'
+  consoleOnly: '&cOnly the console can use this command.'
+
+  depositHelpMessage: '&6/bank deposit <amount> &e- Deposit money into your bank account.'
+  withdrawHelpMessage: '&6/bank withdraw <amount> &e- Withdraw money from your bank account.'
+  invalidDepositSyntax: '&cIncorrect usage. Correct syntax: &6/bank deposit <amount>'
+  invalidWithdrawSyntax: '&cIncorrect usage. Correct syntax: &6/bank withdraw <amount>'
+  depositSuccessMessage: '&aYou have successfully deposited &6${amount} &ainto your bank account.'
+  withdrawSuccessMessage: '&aYou have successfully withdrawn &6${amount} &afrom your bank account.'
+
+  consoleDepositWithdrawHelpMessage: "&6/bank consoledepositwithdraw <player> <amount> <deposit/withdraw> &e- Modify a player's bank balance."
+  invalidConsoleDepositWithdrawSyntax: "&cIncorrect usage. Correct syntax: &6/bank <player> <amount> <deposit/withdraw>"
+  consoleDepositWithdrawSuccessMessage: "&aSuccessfully {transactionType}ed &6${amount} &afor player &6{player}&a."
+
+  peekBalanceHelpMessage: '&6/bank peek <player> &e- View a player`s bank balance.'
+  invalidPeekBalanceSyntax: '&cIncorrect usage. Correct syntax: &6/bank peek <player>'
+
+  seeBalanceSelfHelpMessage: "&6/bank balance &e- Check your current bank balance."
+
+  reloadConfigHelpMessage: "&6/bank reload &e- Reload the bank configuration."

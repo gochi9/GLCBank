@@ -1,5 +1,6 @@
 package com.deadshotmdf.GLCBank.Commands;
 
+import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.GLCB;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
 import com.deadshotmdf.GLCBank.Objects.CommandType;
@@ -15,28 +16,36 @@ import java.util.List;
 
 public class BankBalanceCommand implements CommandExecutor, TabCompleter {
 
-    private final static List<String> commands = List.of("balance", "peek", "topself", "top", "deposit", "withdraw", "reload");
     public final static List<String> EMPTY = Collections.emptyList();
 
     private final HashMap<String, SubCommand> subCommands;
 
     public BankBalanceCommand(GLCB main, BankManager bankManager) {
         this.subCommands = new HashMap<>();
-        this.subCommands.put("balance", new SeeBalanceSelf(main, bankManager, "glcbank.balance", CommandType.PLAYER));
-        this.subCommands.put("peek", new PeekBalance(main, bankManager, "glcbank.peek", CommandType.BOTH));
-        this.subCommands.put("consoledepositwithdraw", new DepositWithdrawForPlayerAsConsole(main, bankManager, "glcbank.peek", CommandType.CONSOLE));
+        this.subCommands.put("balance", new SeeBalanceSelf(bankManager, "glcbank.balance", CommandType.PLAYER, 0, ConfigSettings.getSeeBalanceSelfHelpMessage(), ""));
+        this.subCommands.put("peek", new PeekBalance(bankManager, "glcbank.peek", CommandType.BOTH, 1, ConfigSettings.getPeekBalanceHelpMessage(), ConfigSettings.getInvalidPeekBalanceSyntax()));
+        this.subCommands.put("consoledepositwithdraw", new DepositWithdrawForPlayerAsConsole(bankManager, "glcbank.consoledepositwithdraw", CommandType.CONSOLE, 3, ConfigSettings.getConsoleDepositWithdrawHelpMessage(), ConfigSettings.getInvalidConsoleDepositWithdrawSyntax()));
+        this.subCommands.put("reload", new ReloadConfig(main, bankManager, "glcbank.reload", CommandType.BOTH, 0, ConfigSettings.getReloadConfigHelpMessage(), ""));
+        this.subCommands.put("deposit", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getDepositHelpMessage(), ConfigSettings.getInvalidDepositSyntax()));
+        this.subCommands.put("withdraw", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getWithdrawHelpMessage(), ConfigSettings.getInvalidWithdrawSyntax()));
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(args.length < 1){
-            //msg
+        if(args.length < 1 || args[0].equalsIgnoreCase("help")){
+            List<String> allowedCommands = getAllowedCommands(sender);
+
+            if(allowedCommands.isEmpty())
+                sender.sendMessage(ConfigSettings.getNoAvailableCommands());
+            else
+                allowedCommands.forEach(allowedCommand -> sender.sendMessage(subCommands.get(allowedCommand).getCommandHelpMessage()));
+
             return true;
         }
 
         SubCommand subCommand = subCommands.get(args[0]);
 
         if(subCommand == null){
-            //msg
+            sender.sendMessage(ConfigSettings.getInvalidCommand());
             return true;
         }
 
@@ -48,14 +57,18 @@ public class BankBalanceCommand implements CommandExecutor, TabCompleter {
         if(args.length == 0)
             return EMPTY;
 
-        if(args.length > 1){
-            SubCommand subCommand = subCommands.get(args[0]);
-            return subCommand != null && subCommand.canExecute(sender, false) ? subCommand.tabCompleter(sender, args) : EMPTY;
-        }
+        if(args.length == 1)
+            return getAllowedCommands(sender);
 
+
+        SubCommand subCommand = subCommands.get(args[0]);
+        return subCommand != null && subCommand.canExecute(sender, 0, false) ? subCommand.tabCompleter(sender, args) : EMPTY;
+    }
+
+    private List<String> getAllowedCommands(CommandSender sender) {
         List<String> allowedCommands = new LinkedList<>();
         subCommands.forEach((k, v) -> {
-            if(v.canExecute(sender, false))
+            if(v.canExecute(sender, 0, false))
                 allowedCommands.add(k);
         });
 
