@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
 import java.util.UUID;
 
 public class DepositWithdrawForPlayerAsConsole extends SubCommand{
@@ -45,5 +46,17 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
 
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
         sender.sendMessage(ConfigSettings.getConsoleDepositWithdrawSuccessMessage(modifyType.toString(), bankManager.modifyBank(targetPlayer, amount, modifyType), targetPlayer.getName()));
+    }
+
+    @Override
+    public List<String> tabCompleter(CommandSender sender, String[] args) {
+        if(!canExecute(sender, 0, false) || args.length != 2)
+            return BankBalanceCommand.EMPTY;
+
+        if(!args[1].isEmpty())
+            return bankManager.getName(args[1]);
+
+        else
+            return bankManager.getNames();
     }
 }
