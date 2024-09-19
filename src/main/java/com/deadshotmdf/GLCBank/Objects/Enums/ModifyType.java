@@ -2,9 +2,19 @@ package com.deadshotmdf.GLCBank.Objects.Enums;
 
 public enum ModifyType{
 
-    ADD,
-    REMOVE,
-    SET;
+    ADD("DEPOSIT"),
+    REMOVE("WITHDRAW"),
+    SET("SET");
+
+    private final String alias;
+
+    ModifyType(String alias) {
+        this.alias = alias;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
 
     public static ModifyType getModifyType(String s){
         if(s == null)

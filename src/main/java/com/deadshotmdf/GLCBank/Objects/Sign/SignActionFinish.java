@@ -27,7 +27,12 @@ public class SignActionFinish implements SignGUIFinishHandler {
 
     @Override
     public List<SignGUIAction> onFinish(Player player, SignGUIResult result) {
-        Double amount = BankUtils.getDouble(result.getLineWithoutColor(0));
+        String line = result.getLineWithoutColor(0);
+
+        if(line.isBlank())
+            return EMPTY;
+
+        Double amount = BankUtils.getDouble(line);
 
         if(amount == null){
             player.sendMessage(ConfigSettings.getInvalidAmount());

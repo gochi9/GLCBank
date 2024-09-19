@@ -46,7 +46,7 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
 
         OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
         double finalAmount = bankManager.modifyBank(targetPlayer, amount, modifyType);
-        sender.sendMessage(ConfigSettings.getConsoleDepositWithdrawSuccessMessage(modifyType.toString(), finalAmount, targetPlayer.getName()));
+        sender.sendMessage(ConfigSettings.getConsoleDepositWithdrawSuccessMessage(modifyType.getAlias(), finalAmount, targetPlayer.getName()));
 
         if(targetPlayer.isOnline())
             targetPlayer.getPlayer().sendMessage(modifyType == ModifyType.ADD ? ConfigSettings.getDepositSuccessMessage(finalAmount) : ConfigSettings.getWithdrawSuccessMessage(finalAmount));
