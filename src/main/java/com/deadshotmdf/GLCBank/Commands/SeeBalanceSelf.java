@@ -14,7 +14,7 @@ public class SeeBalanceSelf extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(canExecute(sender))
+        if(canExecute(sender, true))
             sender.sendMessage(bankManager.getPlayerBank(((Player) sender).getUniqueId()).getAmount()+"");
     }
 }

@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public abstract class SubCommand {
 
     protected final GLCB main;
@@ -21,7 +23,7 @@ public abstract class SubCommand {
         this.commandType = commandType;
     }
 
-    protected boolean canExecute(CommandSender sender){
+    protected boolean canExecute(CommandSender sender, boolean sendMessage){
         boolean isPlayer = sender instanceof Player;
         if(commandType == CommandType.PLAYER && !isPlayer){
             //msg
@@ -42,5 +44,8 @@ public abstract class SubCommand {
     }
 
     public abstract void execute(CommandSender sender, String[] args);
+    public List<String> tabCompleter(CommandSender sender, String[] args){
+        return BankBalanceCommand.EMPTY;
+    }
 
 }

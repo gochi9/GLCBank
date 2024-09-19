@@ -8,6 +8,7 @@ import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
 import java.util.UUID;
 
 public class DepositWithdrawForPlayerAsConsole extends SubCommand{
@@ -18,7 +19,7 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!canExecute(sender))
+        if(!canExecute(sender, true))
             return;
 
         if(args.length < 4){

@@ -28,7 +28,9 @@ public final class GLCB extends JavaPlugin {
         pm.registerEvents(new PlayerDeathListener(bankManager), this);
         pm.registerEvents(new PlayerJoinQuitLis(bankManager), this);
 
-        this.getCommand("bank").setExecutor(new BankBalanceCommand(this, bankManager));
+        BankBalanceCommand bankBalanceCommand = new BankBalanceCommand(this, bankManager);
+        this.getCommand("bank").setExecutor(bankBalanceCommand);
+        this.getCommand("bank").setTabCompleter(bankBalanceCommand);
     }
 
     public void onDisable() {

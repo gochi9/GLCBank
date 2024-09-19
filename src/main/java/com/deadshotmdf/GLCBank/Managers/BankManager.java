@@ -1,11 +1,13 @@
 package com.deadshotmdf.GLCBank.Managers;
 
 import com.deadshotmdf.GLCBank.*;
+import com.deadshotmdf.GLCBank.Commands.BankBalanceCommand;
 import com.deadshotmdf.GLCBank.File.InformationHolder;
 import com.deadshotmdf.GLCBank.Objects.BankProfile;
 import com.deadshotmdf.GLCBank.Objects.ModifyType;
 import com.deadshotmdf.GLCBank.Timers.BackupTimer;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
+import com.deadshotmdf.GLCBank.Utils.NameSearcher;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -13,10 +15,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class BankManager extends InformationHolder {
 
@@ -25,6 +24,7 @@ public class BankManager extends InformationHolder {
     private final Random random;
     private final HashMap<UUID, BankProfile> banks;
     private final HashMap<String, UUID> uuids;
+    private final NameSearcher nameSearcher;
     private final BackupTimer backupTimer;
 
     public BankManager(GLCB main, Economy economy) {
@@ -34,6 +34,7 @@ public class BankManager extends InformationHolder {
         this.random = new Random();
         this.banks = new HashMap<>();
         this.uuids = new HashMap<>();
+        this.nameSearcher = new NameSearcher();
 
         try{loadInformation();}
         catch (Throwable ignored){}
@@ -41,9 +42,15 @@ public class BankManager extends InformationHolder {
             try{getPlayerBank(player.getUniqueId()).onJoin();}
             catch (Throwable ignored){continue;}
 
-        for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers())
-            if(offlinePlayer.getName() != null)
-                uuids.put(offlinePlayer.getName().toLowerCase(), offlinePlayer.getUniqueId());
+        for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+            String name = offlinePlayer.getName();
+            if (name == null)
+                continue;
+
+            name = name.toLowerCase();
+            uuids.put(name, offlinePlayer.getUniqueId());
+            nameSearcher.addName(name);
+        }
 
         this.backupTimer = new BackupTimer(this);
         this.backupTimer.runTaskTimerAsynchronously(main, 72000L, 72000L);
@@ -55,6 +62,14 @@ public class BankManager extends InformationHolder {
 
     public UUID getOfflineUUID(String name){
         return name != null ? uuids.get(name.toLowerCase()) : null;
+    }
+
+    public List<String> getName(String index){
+        return index == null || index.isBlank() ? BankBalanceCommand.EMPTY : nameSearcher.search(index.toLowerCase());
+    }
+
+    public List<String> getNames(){
+        return new LinkedList<>(uuids.keySet());
     }
 
     public void withdrawBank(OfflinePlayer player, double withdrawAmount){
@@ -166,8 +181,10 @@ public class BankManager extends InformationHolder {
 
     public void onJoin(Player player){
         UUID uuid = player.getUniqueId();
+        String name =  player.getName().toLowerCase();
         getPlayerBank(uuid).onJoin();
-        uuids.put(player.getName().toLowerCase(), uuid);
+        uuids.put(name, uuid);
+        nameSearcher.addName(name);
     }
 
 }
