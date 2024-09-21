@@ -57,7 +57,7 @@ public abstract class SubCommand {
 
     public abstract void execute(CommandSender sender, String[] args);
     public List<String> tabCompleter(CommandSender sender, String[] args){
-        return BankBalanceCommand.EMPTY;
+        return BankCommand.EMPTY;
     }
 
     public String getCommandHelpMessage(){

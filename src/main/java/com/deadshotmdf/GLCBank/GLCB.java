@@ -1,6 +1,6 @@
 package com.deadshotmdf.GLCBank;
 
-import com.deadshotmdf.GLCBank.Commands.BankBalanceCommand;
+import com.deadshotmdf.GLCBank.Commands.BankCommand;
 import com.deadshotmdf.GLCBank.Listeners.PlayerDeathListener;
 import com.deadshotmdf.GLCBank.Listeners.PlayerJoinQuitLis;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
@@ -28,9 +28,9 @@ public final class GLCB extends JavaPlugin {
         pm.registerEvents(new PlayerDeathListener(bankManager), this);
         pm.registerEvents(new PlayerJoinQuitLis(bankManager), this);
 
-        BankBalanceCommand bankBalanceCommand = new BankBalanceCommand(this, bankManager);
-        this.getCommand("bank").setExecutor(bankBalanceCommand);
-        this.getCommand("bank").setTabCompleter(bankBalanceCommand);
+        BankCommand bankCommand = new BankCommand(this, bankManager);
+        this.getCommand("bank").setExecutor(bankCommand);
+        this.getCommand("bank").setTabCompleter(bankCommand);
     }
 
     public void onDisable() {

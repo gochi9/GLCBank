@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BankBalanceCommand implements CommandExecutor, TabCompleter {
+public class BankCommand implements CommandExecutor, TabCompleter {
 
     public final static List<String> EMPTY = Collections.emptyList();
 
     private final HashMap<String, SubCommand> subCommands;
 
-    public BankBalanceCommand(GLCB main, BankManager bankManager) {
+    public BankCommand(GLCB main, BankManager bankManager) {
         this.subCommands = new HashMap<>();
         this.subCommands.put("balance", new SeeBalanceSelf(bankManager, "glcbank.balance", CommandType.PLAYER, 0, ConfigSettings.getSeeBalanceSelfHelpMessage(), ""));
         this.subCommands.put("peek", new PeekBalance(bankManager, "glcbank.peek", CommandType.BOTH, 1, ConfigSettings.getPeekBalanceHelpMessage(), ConfigSettings.getInvalidPeekBalanceSyntax()));

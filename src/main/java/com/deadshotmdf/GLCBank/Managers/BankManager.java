@@ -1,7 +1,7 @@
 package com.deadshotmdf.GLCBank.Managers;
 
 import com.deadshotmdf.GLCBank.*;
-import com.deadshotmdf.GLCBank.Commands.BankBalanceCommand;
+import com.deadshotmdf.GLCBank.Commands.BankCommand;
 import com.deadshotmdf.GLCBank.File.InformationHolder;
 import com.deadshotmdf.GLCBank.Objects.Player.BankProfile;
 import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
@@ -89,7 +89,7 @@ public class BankManager extends InformationHolder {
     }
 
     public List<String> getName(String index){
-        return index == null || index.isBlank() ? BankBalanceCommand.EMPTY : nameSearcher.search(index.toLowerCase());
+        return index == null || index.isBlank() ? BankCommand.EMPTY : nameSearcher.search(index.toLowerCase());
     }
 
     public List<String> getNames(){

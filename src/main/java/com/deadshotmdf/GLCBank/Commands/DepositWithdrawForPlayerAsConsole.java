@@ -55,7 +55,7 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
     @Override
     public List<String> tabCompleter(CommandSender sender, String[] args) {
         if(!canExecute(sender, 0, false) || args.length != 2)
-            return BankBalanceCommand.EMPTY;
+            return BankCommand.EMPTY;
 
         if(!args[1].isEmpty())
             return bankManager.getName(args[1]);
