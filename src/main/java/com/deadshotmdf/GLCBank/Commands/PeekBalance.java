@@ -16,9 +16,6 @@ public class PeekBalance extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!canExecute(sender, args.length, true))
-            return;
-
         UUID target = bankManager.getOfflineUUID(args[1]);
 
         if(target == null){

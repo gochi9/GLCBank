@@ -50,6 +50,9 @@ public class BankCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if(!subCommand.canExecute(sender, args.length, true))
+            return true;
+
         subCommand.execute(sender, args);
         return true;
     }

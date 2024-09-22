@@ -14,7 +14,6 @@ public class SeeBalanceSelf extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(canExecute(sender, args.length, true))
-            sender.sendMessage(ConfigSettings.getPlayerBalance(sender.getName(), bankManager.getPlayerBank(((Player)sender).getUniqueId()).getAmount()));
+        sender.sendMessage(ConfigSettings.getPlayerBalance(sender.getName(), bankManager.getPlayerBank(((Player)sender).getUniqueId()).getAmount()));
     }
 }

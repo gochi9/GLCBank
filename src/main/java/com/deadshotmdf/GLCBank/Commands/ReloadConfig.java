@@ -17,9 +17,6 @@ public class ReloadConfig extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!canExecute(sender, args.length, true))
-            return;
-
         ConfigSettings.reloadConfig(main);
         sender.sendMessage(ConfigSettings.getReloadConfig());
     }

@@ -20,9 +20,6 @@ public class DepositWithdrawForPlayerAsConsole extends SubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!canExecute(sender, args.length, true))
-            return;
-
         ModifyType modifyType = ModifyType.getModifyType(args[3]);
 
         if(modifyType == null || modifyType == ModifyType.SET){

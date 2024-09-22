@@ -16,9 +16,6 @@ public class DepositWithdrawCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!canExecute(sender, args.length, true))
-            return;
-
         ModifyType type = ModifyType.getModifyType(args[0]);
 
         if(type == null || type == ModifyType.SET){
