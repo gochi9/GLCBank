@@ -141,7 +141,7 @@ public class BankManager extends InformationHolder {
     public void onDeath(Player player){
         double balance = economy.getBalance(player);
 
-        if(balance <= 0.0)
+        if(balance <= 0.01)
             return;
 
         double percent = getRandomNumber(ConfigSettings.getPercentMoneyLostOnDeathMin(), ConfigSettings.getPercentMoneyLotsOnDeathMax());
