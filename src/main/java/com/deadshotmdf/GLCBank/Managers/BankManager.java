@@ -12,6 +12,7 @@ import com.deadshotmdf.GLCBank.Timers.BackupTimer;
 import com.deadshotmdf.GLCBank.Timers.CalculateTopBalance;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import com.deadshotmdf.GLCBank.Utils.NameSearcher;
+import com.deadshotmdf.gLCoins_Server.EconomyWrapper;
 import de.rapha149.signgui.SignGUI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -25,7 +26,7 @@ import java.util.*;
 public class BankManager extends InformationHolder {
 
     private final GLCB main;
-    private final Economy economy;
+    private final EconomyWrapper economy;
     private final Random random;
     private final HashMap<UUID, BankProfile> banks;
     private final HashMap<String, UUID> uuids;
@@ -36,7 +37,7 @@ public class BankManager extends InformationHolder {
     private final HashMap<UUID, PlayerTopProfile> playerTopProfiles;
     private final SignGUI depositGUI, withdrawGUI;
 
-    public BankManager(GLCB main, Economy economy) {
+    public BankManager(GLCB main, EconomyWrapper economy) {
         super(main, "bank.yml");
         this.main = main;
         this.economy = economy;
@@ -130,10 +131,12 @@ public class BankManager extends InformationHolder {
         if(balance < amount)
             amount = balance;
 
-        EconomyResponse response = remove ? economy.depositPlayer(player, amount) : economy.withdrawPlayer(player, amount);
+        if(remove)
+            economy.noTaxDepositPlayer(player, amount);
+        else
+            economy.withdrawPlayer(player, amount);
 
-        if(response.transactionSuccess())
-            bank.modifyAmount(amount, modifyType);
+        bank.modifyAmount(amount, modifyType);
 
         return amount;
     }

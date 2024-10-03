@@ -4,6 +4,7 @@ import com.deadshotmdf.GLCBank.Commands.BankCommand;
 import com.deadshotmdf.GLCBank.Listeners.PlayerDeathListener;
 import com.deadshotmdf.GLCBank.Listeners.PlayerJoinQuitLis;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
+import com.deadshotmdf.gLCoins_Server.EconomyWrapper;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -11,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GLCB extends JavaPlugin {
 
-    private Economy econ = null;
+    private EconomyWrapper econ = null;
     private BankManager bankManager;
 
     public void onEnable() {
@@ -45,7 +46,7 @@ public final class GLCB extends JavaPlugin {
         if (rsp == null)
             return false;
 
-        econ = rsp.getProvider();
+        econ = (EconomyWrapper) rsp.getProvider();
         return econ != null;
     }
 
