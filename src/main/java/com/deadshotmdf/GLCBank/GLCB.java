@@ -4,6 +4,9 @@ import com.deadshotmdf.GLCBank.Commands.BankCommand;
 import com.deadshotmdf.GLCBank.Listeners.PlayerDeathListener;
 import com.deadshotmdf.GLCBank.Listeners.PlayerJoinQuitLis;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
+import com.deadshotmdf.GLC_GUIS.GLCGGUIS;
+import com.deadshotmdf.GLC_GUIS.Mayor.Enums.UpgradeType;
+import com.deadshotmdf.GLC_GUIS.Mayor.MayorManager;
 import com.deadshotmdf.gLCoins_Server.EconomyWrapper;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.PluginManager;
@@ -14,28 +17,41 @@ public final class GLCB extends JavaPlugin {
 
     private EconomyWrapper econ = null;
     private BankManager bankManager;
+    private MayorManager mayorManager;
 
     public void onEnable() {
+        PluginManager pm = getServer().getPluginManager();
+
         if (!setupEconomy() ) {
             getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-            getServer().getPluginManager().disablePlugin(this);
+            pm.disablePlugin(this);
             return;
         }
+
+        try{
+            this.mayorManager = ((GLCGGUIS)pm.getPlugin("GLC-GUIS")).getMayorManager();
+            this.mayorManager.getUpgrade(UpgradeType.BANK);
+        }
+        catch(Throwable ignored){
+            pm.disablePlugin(this);
+            return;
+        }
+
         ConfigSettings.reloadConfig(this);
 
         this.bankManager = new BankManager(this, econ);
 
-        PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerDeathListener(bankManager), this);
         pm.registerEvents(new PlayerJoinQuitLis(bankManager), this);
 
-        BankCommand bankCommand = new BankCommand(this, bankManager);
+        BankCommand bankCommand = new BankCommand(this, bankManager, mayorManager);
         this.getCommand("bank").setExecutor(bankCommand);
         this.getCommand("bank").setTabCompleter(bankCommand);
     }
 
     public void onDisable() {
-        this.bankManager.onServerStop();
+        if(this.bankManager != null)
+            this.bankManager.onServerStop();
     }
 
     private boolean setupEconomy() {

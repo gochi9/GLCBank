@@ -13,12 +13,10 @@ public class ConfigSettings {
     private static int percentMoneyLostOnDeathMin;
     private static int percentMoneyLotsOnDeathMax;
 
-    private static double interestMin;
-    private static double interestMax;
     private static int minutesPlayedForMax;
 
-    private static double interestGainStreak;
-    private static double maxInterestGainStreak;
+//    private static double interestGainStreak;
+//    private static double maxInterestGainStreak;
 
     //////////////
     // Messages //
@@ -72,25 +70,17 @@ public class ConfigSettings {
         return percentMoneyLotsOnDeathMax;
     }
 
-    public static double getInterestMin() {
-        return interestMin;
-    }
-
-    public static double getInterestMax() {
-        return interestMax;
-    }
-
     public static int getMinutesPlayedForMax() {
         return minutesPlayedForMax;
     }
 
-    public static double getInterestGainStreak() {
-        return interestGainStreak;
-    }
-
-    public static double getMaxInterestGainStreak() {
-        return maxInterestGainStreak;
-    }
+//    public static double getInterestGainStreak() {
+//        return interestGainStreak;
+//    }
+//
+//    public static double getMaxInterestGainStreak() {
+//        return maxInterestGainStreak;
+//    }
 
     //////////////
     // Messages //
@@ -212,15 +202,10 @@ public class ConfigSettings {
         percentMoneyLostOnDeathMin = config.getInt("percentMoneyLostOnDeathMin");
         percentMoneyLotsOnDeathMax = config.getInt("percentMoneyLotsOnDeathMax");
 
-        double minInterest = config.getDouble("interestMin");
-        double maxInterest  = config.getDouble("interestMax");
         minutesPlayedForMax = config.getInt("minutesPlayedForMax");
 
-        interestGainStreak = config.getDouble("interestGainStreak") / 100;
-        maxInterestGainStreak = config.getDouble("maxInterestGainStreak") / 100;
-
-        interestMin = Math.min(minInterest, maxInterest) / 100;
-        interestMax = Math.max(minInterest, maxInterest) / 100;
+//        interestGainStreak = config.getDouble("interestGainStreak") / 100;
+//        maxInterestGainStreak = config.getDouble("maxInterestGainStreak") / 100;
 
         ConfigurationSection messagesSection = config.getConfigurationSection("messages");
 

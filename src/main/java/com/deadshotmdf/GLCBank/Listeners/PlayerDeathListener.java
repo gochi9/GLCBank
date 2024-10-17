@@ -16,7 +16,8 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent ev) {
-        bankManager.onDeath(ev.getPlayer());
+        if(!ev.getPlayer().hasPermission("glc.cookiebooster"))
+            bankManager.onDeath(ev.getPlayer());
     }
 
 }

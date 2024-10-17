@@ -4,6 +4,8 @@ import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
 import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
 import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
+import com.deadshotmdf.GLC_GUIS.Mayor.Enums.UpgradeType;
+import com.deadshotmdf.GLC_GUIS.Mayor.MayorManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,8 +15,11 @@ import java.util.UUID;
 
 public class OpenPlayerInput extends SubCommand{
 
-    public OpenPlayerInput(BankManager bankManager, String permission, CommandType commandType, int argsRequired, String commandHelpMessage, String commandWrongSyntax) {
+    private final MayorManager mayorManager;
+
+    public OpenPlayerInput(BankManager bankManager, MayorManager mayorManager, String permission, CommandType commandType, int argsRequired, String commandHelpMessage, String commandWrongSyntax) {
         super(bankManager, permission, commandType, argsRequired, commandHelpMessage, commandWrongSyntax);
+        this.mayorManager = mayorManager;
     }
 
     @Override
@@ -37,6 +42,12 @@ public class OpenPlayerInput extends SubCommand{
 
         if(modifyType == null){
             sender.sendMessage(ConfigSettings.getInvalidTransactionType());
+            return;
+        }
+
+        if(mayorManager.getPlayerUpgrade(target, UpgradeType.UNLOCK_BANK) < 1){
+            sender.sendMessage(com.deadshotmdf.GLC_GUIS.ConfigSettings.getCannotOpenBankTarget(args[1]));
+            player.sendMessage(com.deadshotmdf.GLC_GUIS.ConfigSettings.getCannotOpenBank());
             return;
         }
 

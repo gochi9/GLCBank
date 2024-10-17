@@ -4,6 +4,7 @@ import com.deadshotmdf.GLCBank.ConfigSettings;
 import com.deadshotmdf.GLCBank.GLCB;
 import com.deadshotmdf.GLCBank.Managers.BankManager;
 import com.deadshotmdf.GLCBank.Objects.Enums.CommandType;
+import com.deadshotmdf.GLC_GUIS.Mayor.MayorManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,15 +21,15 @@ public class BankCommand implements CommandExecutor, TabCompleter {
 
     private final HashMap<String, SubCommand> subCommands;
 
-    public BankCommand(GLCB main, BankManager bankManager) {
+    public BankCommand(GLCB main, BankManager bankManager, MayorManager mayorManager) {
         this.subCommands = new HashMap<>();
-        this.subCommands.put("balance", new SeeBalanceSelf(bankManager, "glcbank.balance", CommandType.PLAYER, 0, ConfigSettings.getSeeBalanceSelfHelpMessage(), ""));
+        this.subCommands.put("balance", new SeeBalanceSelf(bankManager, mayorManager, "glcbank.balance", CommandType.PLAYER, 0, ConfigSettings.getSeeBalanceSelfHelpMessage(), ""));
         this.subCommands.put("peek", new PeekBalance(bankManager, "glcbank.peek", CommandType.BOTH, 1, ConfigSettings.getPeekBalanceHelpMessage(), ConfigSettings.getInvalidPeekBalanceSyntax()));
-        this.subCommands.put("consoledepositwithdraw", new DepositWithdrawForPlayerAsConsole(bankManager, "glcbank.consoledepositwithdraw", CommandType.CONSOLE, 3, ConfigSettings.getConsoleDepositWithdrawHelpMessage(), ConfigSettings.getInvalidConsoleDepositWithdrawSyntax()));
+        this.subCommands.put("consoledepositwithdraw", new DepositWithdrawForPlayerAsConsole(bankManager, mayorManager, "glcbank.consoledepositwithdraw", CommandType.CONSOLE, 3, ConfigSettings.getConsoleDepositWithdrawHelpMessage(), ConfigSettings.getInvalidConsoleDepositWithdrawSyntax()));
         this.subCommands.put("reload", new ReloadConfig(main, bankManager, "glcbank.reload", CommandType.BOTH, 0, ConfigSettings.getReloadConfigHelpMessage(), ""));
-        this.subCommands.put("deposit", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getDepositHelpMessage(), ConfigSettings.getInvalidDepositSyntax()));
-        this.subCommands.put("withdraw", new DepositWithdrawCommand(bankManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getWithdrawHelpMessage(), ConfigSettings.getInvalidWithdrawSyntax()));
-        this.subCommands.put("openinput", new OpenPlayerInput(bankManager, "glcbank.openinput", CommandType.CONSOLE, 2, ConfigSettings.getOpenPlayerInputHelpMessage(), ConfigSettings.getInvalidOpenPlayerInputSyntax()));
+        this.subCommands.put("deposit", new DepositWithdrawCommand(bankManager, mayorManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getDepositHelpMessage(), ConfigSettings.getInvalidDepositSyntax()));
+        this.subCommands.put("withdraw", new DepositWithdrawCommand(bankManager, mayorManager, "glcbank.depositwithdraw", CommandType.PLAYER, 1, ConfigSettings.getWithdrawHelpMessage(), ConfigSettings.getInvalidWithdrawSyntax()));
+        this.subCommands.put("openinput", new OpenPlayerInput(bankManager, mayorManager,"glcbank.openinput", CommandType.CONSOLE, 2, ConfigSettings.getOpenPlayerInputHelpMessage(), ConfigSettings.getInvalidOpenPlayerInputSyntax()));
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

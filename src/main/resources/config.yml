@@ -7,15 +7,14 @@ percentMoneyLotsOnDeathMax: 25
 
 #120 minutes = 2h needed to play to receive a 2.1% interest
 #If player has less they'll receive an appropriate amount
-interestMin: 0.0
-interestMax: 2.1
 minutesPlayedForMax: 120
 
+##No longer used, maybe for future
 #0.05% per day in a row
 #30 days = 1.5%
 #Streak is lost if you don't login at all since the server restart
-interestGainStreak: 0.05
-maxInterestGainStreak: 1.5
+#interestGainStreak: 0.05
+#maxInterestGainStreak: 1.5
 
 messages:
   deathBalanceLossMessage: '&cOh no! You`ve died and lost &6{percentage}% &7(&6{balanceLost}&7) &cfrom your balance. Be careful next time.'

@@ -6,17 +6,20 @@ import java.util.UUID;
 
 public class BankUtils {
 
-    public static  double getInterest(long playtime){
+    public static double getInterest(long playtime, double max){
+        double min = 0.01;
+
         if (playtime <= 0)
-            return ConfigSettings.getInterestMin();
-
-        if (playtime >= ConfigSettings.getInterestMax())
-            return ConfigSettings.getInterestMax();
-
-        double min = ConfigSettings.getInterestMin(), max = ConfigSettings.getInterestMax();
+            return min;
 
         if(min == max)
             return max;
+
+        if(playtime >= ConfigSettings.getMinutesPlayedForMax())
+            return max;
+
+        min = Math.min(min, max);
+        max = Math.max(max, min);
 
         double percentage = (double) playtime / ConfigSettings.getMinutesPlayedForMax();
         return min + (percentage * (max - min));

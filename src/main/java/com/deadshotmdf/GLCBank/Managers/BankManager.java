@@ -12,10 +12,12 @@ import com.deadshotmdf.GLCBank.Timers.BackupTimer;
 import com.deadshotmdf.GLCBank.Timers.CalculateTopBalance;
 import com.deadshotmdf.GLCBank.Utils.BankUtils;
 import com.deadshotmdf.GLCBank.Utils.NameSearcher;
+import com.deadshotmdf.GLC_GUIS.Mayor.Enums.UpgradeType;
+import com.deadshotmdf.GLC_GUIS.Mayor.MayorManager;
+import com.deadshotmdf.GLC_GUIS.Mayor.Objects.Upgrade;
+import com.deadshotmdf.GLC_GUIS.Mayor.Objects.UpgradeLevel;
 import com.deadshotmdf.gLCoins_Server.EconomyWrapper;
 import de.rapha149.signgui.SignGUI;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,6 +28,7 @@ import java.util.*;
 public class BankManager extends InformationHolder {
 
     private final GLCB main;
+    private final MayorManager mayorManager;
     private final EconomyWrapper economy;
     private final Random random;
     private final HashMap<UUID, BankProfile> banks;
@@ -37,9 +40,10 @@ public class BankManager extends InformationHolder {
     private final HashMap<UUID, PlayerTopProfile> playerTopProfiles;
     private final SignGUI depositGUI, withdrawGUI;
 
-    public BankManager(GLCB main, EconomyWrapper economy) {
+    public BankManager(GLCB main, MayorManager mayorManager, EconomyWrapper economy) {
         super(main, "bank.yml");
         this.main = main;
+        this.mayorManager = mayorManager;
         this.economy = economy;
         this.random = new Random();
         this.banks = new HashMap<>();
@@ -136,7 +140,7 @@ public class BankManager extends InformationHolder {
         else
             economy.withdrawPlayer(player, amount);
 
-        bank.modifyAmount(amount, modifyType);
+        bank.modifyAmount(amount, modifyType, mayorManager, player.getUniqueId());
 
         return amount;
     }
@@ -160,32 +164,37 @@ public class BankManager extends InformationHolder {
         }
         catch (Throwable ignored){}
 
-        banks.values().forEach(this::tryCalculateBank);
+        new HashMap<>(banks).forEach(this::tryCalculateBank);
         saveInformation();
     }
 
-    private void tryCalculateBank(BankProfile bank){
-        try{calculateBank(bank);}
+    private void tryCalculateBank(UUID uuid, BankProfile bank){
+        try{calculateBank(uuid, bank);}
         catch (Throwable ignored){}
     }
 
-    private void calculateBank(BankProfile bank){
+    private void calculateBank(UUID uuid, BankProfile bank){
         bank.onQuit();
 
-        double balance = bank.getAmount();
-        double interest = BankUtils.getInterest(bank.getTotalMinutesPlayedToday());
-        double dayStreakInterest = bank.getDayStreak() * ConfigSettings.getInterestGainStreak();
-        dayStreakInterest = Math.min(dayStreakInterest, ConfigSettings.getMaxInterestGainStreak());
+        double benefit = mayorManager.getUpgradeBenefit(uuid, UpgradeType.BANK);
 
-        if(interest <= 0 && dayStreakInterest <= 0)
+        if(benefit <= 0.000)
+            return;
+
+        double balance = bank.getAmount();
+        double interest = BankUtils.getInterest(bank.getTotalMinutesPlayedToday(), benefit);
+//        double dayStreakInterest = bank.getDayStreak() * ConfigSettings.getInterestGainStreak();
+//        dayStreakInterest = Math.min(dayStreakInterest, ConfigSettings.getMaxInterestGainStreak());
+
+        if(interest <= 0) /*&& dayStreakInterest <= 0)*/
             return;
 
         if(balance < 0.0){
             balance = 0.0;
-            bank.modifyAmount(0.0, ModifyType.SET);
+            bank.modifyAmount(0.0, ModifyType.SET, mayorManager, uuid);
         }
 
-            bank.modifyAmount((balance * interest) + (balance * dayStreakInterest), ModifyType.ADD);
+        bank.modifyAmount((balance * interest), ModifyType.ADD, mayorManager, uuid);
     }
 
     @Override

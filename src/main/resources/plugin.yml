@@ -3,7 +3,7 @@ main: com.deadshotmdf.GLCBank.GLCB
 author: DeadshotMDF
 version: 1.0
 api-version: 1.21
-depend: [Vault, Essentials]
+depend: [Vault, Essentials, GLC-GUIS]
 commands:
   bank:
 

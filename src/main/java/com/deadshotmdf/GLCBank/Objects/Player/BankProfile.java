@@ -1,7 +1,10 @@
 package com.deadshotmdf.GLCBank.Objects.Player;
 
 import com.deadshotmdf.GLCBank.Objects.Enums.ModifyType;
+import com.deadshotmdf.GLC_GUIS.Mayor.Enums.UpgradeType;
+import com.deadshotmdf.GLC_GUIS.Mayor.MayorManager;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class BankProfile {
@@ -36,12 +39,18 @@ public class BankProfile {
         return joinedToday;
     }
 
-    public void modifyAmount(double amount, ModifyType modifyType) {
+    public void modifyAmount(double amount, ModifyType modifyType, MayorManager mayorManager, UUID uuid) {
         switch (modifyType) {
             case ADD -> this.amount += amount;
             case REMOVE -> this.amount -= amount;
             case SET -> this.amount = amount;
         }
+
+        int i = (int) mayorManager.getUpgradeBenefit(uuid, UpgradeType.BANK_LIMIT);
+        if(i <= 1)
+            return;
+
+        this.amount = Math.min(this.amount, i);
     }
 
     public void onJoin(){
