@@ -39,7 +39,7 @@ public final class GLCB extends JavaPlugin {
 
         ConfigSettings.reloadConfig(this);
 
-        this.bankManager = new BankManager(this, econ);
+        this.bankManager = new BankManager(this, mayorManager, econ);
 
         pm.registerEvents(new PlayerDeathListener(bankManager), this);
         pm.registerEvents(new PlayerJoinQuitLis(bankManager), this);
